@@ -1,0 +1,11 @@
+body {
+  padding-top: 50px;
+}
+
+.js-prev-page, .js-next-page {
+	display: inline-block;
+}
+
+.hidden {
+	display: none;
+}
