@@ -1,4 +1,4 @@
-body {
+/*body {
   padding-top: 50px;
 }
 
@@ -8,4 +8,24 @@ body {
 
 .hidden {
 	display: none;
+}
+*/
+* {
+	box-sizing: border-box;
+	font-family: 'Roboto', sans-serif;
+}
+
+
+main {
+	max-width: 960px;
+	margin: 0 auto;
+}
+
+p {
+	max-width: 400px;
+}
+
+.container {
+	padding: 0 60px;
+	padding-top: 90px;
 }

@@ -92,8 +92,8 @@ function createGenreArray(state) {
    
    var descriptions = state.results.map(function(movie) { return movie.wTeaser; });
    var genres = descriptions.map(function(description) { return description.match(/(?:is a )(.+?film)/); });
-   var genreShorts = genres.filter(function(genre) { if (genre) { return genre[1] }});
-   state.genres = genreShorts.map(function(genre) { return genre[1]});
+   var genreShorts = genres.filter(function(genre) { if (genre) { return genre[1]; }});
+   state.genres = genreShorts.map(function(genre) { return genre[1].trim(); });
 
 }
 
@@ -101,11 +101,18 @@ function createRandom3GenrePicks(state) {
 
     var max = state.genres.length - 1;
     var min = 0
+    var randomPick;
 
-    state.genrePicks.push(state.genres[randomIntFromInterval(min,max)]);
-    state.genrePicks.push(state.genres[randomIntFromInterval(min,max)]);
-    state.genrePicks.push(state.genres[randomIntFromInterval(min,max)]);
+    while (state.genrePicks.length < 3) {
+      
+      randomPick = state.genres[randomIntFromInterval(min,max)];
 
+      if (state.genrePicks.indexOf(randomPick) === -1) {
+          state.genrePicks.push(randomPick);
+      }
+    // state.genrePicks.push(state.genres[randomIntFromInterval(min,max)]);
+    // state.genrePicks.push(state.genres[randomIntFromInterval(min,max)]);
+    }
 }
 
 function createDirectorArray(state) {
@@ -113,8 +120,8 @@ function createDirectorArray(state) {
    var descriptions = state.results.map(function(movie) { return movie.wTeaser; });
    var directors = descriptions.map(function(description) {
     return description.match(/(?:directed by )(.+?\b([A-Z]{1}[a-z]{1,30}[- ]{0,1}|[A-Z]{1}[- \']{1}[A-Z]{0,1}[a-z]{1,30}[- ]{0,1}|[a-z]{1,2}[ -\']{1}[A-Z]{1}[a-z]{1,30}){1,3})/); });
-   var directorShorts = directors.filter(function(director) { if (director) { return director[1] }});
-   state.directors = directorShorts.map(function(director) { return director[1]});
+   var directorShorts = directors.filter(function(director) { if (director) { return director[1]; }});
+   state.directors = directorShorts.map(function(director) { return director[1].trim(); });
 
 }
 
@@ -122,35 +129,65 @@ function createRandom3DirectorPicks(state) {
 
     var max = state.directors.length - 1;
     var min = 0
+    var randomPick;
 
-    state.directorPicks.push(state.directors[randomIntFromInterval(min,max)]);
-    state.directorPicks.push(state.directors[randomIntFromInterval(min,max)]);
-    state.directorPicks.push(state.directors[randomIntFromInterval(min,max)]);
+    while (state.directorPicks.length < 3) {
+      
+      randomPick = state.directors[randomIntFromInterval(min,max)];
 
+      if (state.directorPicks.indexOf(randomPick) === -1) {
+          state.directorPicks.push(randomPick);
+      }
+    }
 }
+
+// function createRandom3DirectorPicks(state) {
+
+//     var max = state.directors.length - 1;
+//     var min = 0
+
+//     state.directorPicks.push(state.directors[randomIntFromInterval(min,max)]);
+//     state.directorPicks.push(state.directors[randomIntFromInterval(min,max)]);
+//     state.directorPicks.push(state.directors[randomIntFromInterval(min,max)]);
+
+// }
 
 function createStarArray(state) {
    
    var descriptions = state.results.map(function(movie) { return movie.wTeaser; });
    var stars = descriptions.map(function(description) { 
     return description.match(/(?:starring | stars )(.+?\b([A-Z]{1}[a-z]{1,30}[- ]{0,1}|[A-Z]{1}[- \']{1}[A-Z]{0,1}[a-z]{1,30}[- ]{0,1}|[a-z]{1,2}[ -\']{1}[A-Z]{1}[a-z]{1,30}){1,3})/); });
-   var starShorts = stars.filter(function(star) { if (star) { return star[1] }});
-   state.stars = starShorts.map(function(star) { return star[1]});
+   //var starShorts = stars.filter(function(star) { if (star) { return star[1] }});
+   var starShorts = stars.filter(function(star) { if (star && star[1][0].match(/[A-Z]/)) { return star[1]; }});
+   state.stars = starShorts.map(function(star) { return star[1].trim(); });
 
+   for (var i = 0; i < state.stars.length; i++) {
+      var asProbArray = state.stars[i].split(' ');
+      var asTarget;
+      for (var x = 0; x < asProbArray.length; x++) {
+        if (asProbArray[x] === "as") {
+            asTarget = x;
+            state.stars[i] = asProbArray.splice(0, asTarget).join('');
+        }
+      }
+   }
 }
 
 function createRandom3StarPicks(state) {
 
     var max = state.stars.length - 1;
     var min = 0
+    var randomPick;
 
-    state.starPicks.push(state.stars[randomIntFromInterval(min,max)]);
-    state.starPicks.push(state.stars[randomIntFromInterval(min,max)]);
-    state.starPicks.push(state.stars[randomIntFromInterval(min,max)]);
+    while (state.starPicks.length < 3) {
+      
+      randomPick = state.stars[randomIntFromInterval(min,max)];
 
+      if (state.starPicks.indexOf(randomPick) === -1) {
+          state.starPicks.push(randomPick);
+      }
+    }
 }
-
-
 
 function randomIntFromInterval(min,max)
 {
@@ -173,7 +210,7 @@ function displayTasteDiveSearchData(data) {
   // }
  createStateArrays(state, data);
 
-  state.starPicks.forEach(function(item, index) {
+  state.directorPicks.forEach(function(item, index) {
   //state.genres.forEach(function(item, index) {  
      
         resultElement += item + ':' + index + '<br>';
