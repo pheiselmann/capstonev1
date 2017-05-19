@@ -5,10 +5,13 @@ var state = {
   route: 'start',
   results: [],
   genres: [],
+  genreShorts: [],
   genrePicks: [],
   directors: [],
+  directorShorts: [],
   directorPicks: [],
   stars: [],
+  starShorts: [],
   starPicks: [],
   movieKeys: [],
   movieIdeas: []
@@ -41,6 +44,15 @@ function setRoute(state, route) {
 function resetGame(state) {
   // state.score = 0;
   // state.currentQuestionIndex = 0;
+  state.results = [];
+  state.genres = [];
+  state.genrePicks = [];
+  state.directors = [];
+  state.directorPicks = [];
+  state.stars = [];
+  state.starPicks = [];
+  state.movieKeys = [];
+  state.movieIdeas = [];
   setRoute(state, 'start');
 };
 
@@ -62,10 +74,12 @@ function createStateArrays(state, data) {
 function createGenreArray(state) {
    
    var descriptions = state.results.map(function(movie) { return movie.wTeaser; });
-   var genres = descriptions.map(function(description) { return description.match(/(?:is a )(.+?film)/); });
-   var genreShorts = genres.filter(function(genre) { if (genre) { return genre[1]; }});
-   state.genres = genreShorts.map(function(genre) { return genre[1].trim(); });
-
+   //var genres = descriptions.map(function(description) { return description.match(/(?:is a )(.+?film)/); });
+   var genres = descriptions.map(function(description, i) { return { name: description.match(/(?:is a )(.+?film)/), index: i } });
+   //state.genreShorts = genres.filter(function(genre) { if (genre) { return genre[1]; }});
+   state.genreShorts = genres.filter(function(genre) { if (genre.name) { return genre; }});
+   //state.genres = state.genreShorts.map(function(genre) { return genre[1].trim(); });
+   state.genres = state.genreShorts.map(function(genre) { return { name: genre.name[1].trim(), index: genre.index} });
 }
 
 function createRandom3GenrePicks(state) {
@@ -89,10 +103,15 @@ function createRandom3GenrePicks(state) {
 function createDirectorArray(state) {
    
    var descriptions = state.results.map(function(movie) { return movie.wTeaser; });
-   var directors = descriptions.map(function(description) {
-    return description.match(/(?:directed by )(.+?\b([A-Z]{1}[a-z]{1,30}[- ]{0,1}|[A-Z]{1}[- \']{1}[A-Z]{0,1}[a-z]{1,30}[- ]{0,1}|[a-z]{1,2}[ -\']{1}[A-Z]{1}[a-z]{1,30}){1,3})/); });
-   var directorShorts = directors.filter(function(director) { if (director) { return director[1]; }});
-   state.directors = directorShorts.map(function(director) { return director[1].trim(); });
+   // var directors = descriptions.map(function(description) {
+   //  return description.match(/(?:directed by )(.+?\b([A-Z]{1}[a-z]{1,30}[- ]{0,1}|[A-Z]{1}[- \']{1}[A-Z]{0,1}[a-z]{1,30}[- ]{0,1}|[a-z]{1,2}[ -\']{1}[A-Z]{1}[a-z]{1,30}){1,3})/); });
+   var directors = descriptions.map(function(description, i) { 
+       return { name: description.match(/(?:directed by )(.+?\b([A-Z]{1}[a-z]{1,30}[- ]{0,1}|[A-Z]{1}[- \']{1}[A-Z]{0,1}[a-z]{1,30}[- ]{0,1}|[a-z]{1,2}[ -\']{1}[A-Z]{1}[a-z]{1,30}){1,3})/), index: i } });
+   //state.directorShorts = directors.filter(function(director) { if (director) { return director[1]; }});
+   state.directorShorts = directors.filter(function(director) { if (director.name) { return director; }});
+   //state.directors = state.directorShorts.map(function(director) { return director[1].trim(); });
+   //state.directors = state.directorShorts.map(function(director, i) { return { name: director[1].trim(), index: i } });
+   state.directors = state.directorShorts.map(function(director) { return { name: director.name[1].trim(), index: director.index} });
 
 }
 
@@ -126,22 +145,39 @@ function createRandom3DirectorPicks(state) {
 function createStarArray(state) {
    
    var descriptions = state.results.map(function(movie) { return movie.wTeaser; });
-   var stars = descriptions.map(function(description) { 
-    return description.match(/(?:starring | stars )(.+?\b([A-Z]{1}[a-z]{1,30}[- ]{0,1}|[A-Z]{1}[- \']{1}[A-Z]{0,1}[a-z]{1,30}[- ]{0,1}|[a-z]{1,2}[ -\']{1}[A-Z]{1}[a-z]{1,30}){1,3})/); });
+   // var stars = descriptions.map(function(description) { 
+   //  return description.match(/(?:starring | stars )(.+?\b([A-Z]{1}[a-z]{1,30}[- ]{0,1}|[A-Z]{1}[- \']{1}[A-Z]{0,1}[a-z]{1,30}[- ]{0,1}|[a-z]{1,2}[ -\']{1}[A-Z]{1}[a-z]{1,30}){1,3})/); });
+   var stars = descriptions.map(function(description, i) { 
+    return { name: description.match(/(?:starring | stars )(.+?\b([A-Z]{1}[a-z]{1,30}[- ]{0,1}|[A-Z]{1}[- \']{1}[A-Z]{0,1}[a-z]{1,30}[- ]{0,1}|[a-z]{1,2}[ -\']{1}[A-Z]{1}[a-z]{1,30}){1,3})/), index: i } });
+  // MAY HAVE TO TRIM STAR NAME EARLIER HERE
    //var starShorts = stars.filter(function(star) { if (star) { return star[1] }});
-   var starShorts = stars.filter(function(star) { if (star && star[1][0].match(/[A-Z]/)) { return star[1]; }});
-   state.stars = starShorts.map(function(star) { return star[1].trim(); });
+   //state.starShorts = stars.filter(function(star) { if (star && star[1][0].match(/[A-Z]/)) { return star[1]; }});
+   state.starShorts = stars.filter(function(star) { if (star.name && star.name[1][0].match(/[A-Z]/)) { return star; }});
+   //state.stars = state.starShorts.map(function(star) { return star[1].trim(); } );
+   state.stars = state.starShorts.map(function(star) { return {name: star.name[1].trim(), index: star.index } } );
+   //state.starIndices = state.starShorts.map(function(star, index) { return index: });
 
    for (var i = 0; i < state.stars.length; i++) {
-      var asProbArray = state.stars[i].split(' ');
+      var asProbArray = state.stars[i].name.split(' ');
       var asTarget;
       for (var x = 0; x < asProbArray.length; x++) {
         if (asProbArray[x] === "as") {
             asTarget = x;
-            state.stars[i] = asProbArray.splice(0, asTarget).join(' ');
+            state.stars[i].name = asProbArray.splice(0, asTarget).join(' ');
         }
       }
    }
+
+   // for (var i = 0; i < state.stars.length; i++) {
+   //    var asProbArray = state.stars[i].split(' ');
+   //    var asTarget;
+   //    for (var x = 0; x < asProbArray.length; x++) {
+   //      if (asProbArray[x] === "as") {
+   //          asTarget = x;
+   //          state.stars[i] = asProbArray.splice(0, asTarget).join(' ');
+   //      }
+   //    }
+   // }
 }
 
 function createRandom3StarPicks(state) {
@@ -225,7 +261,7 @@ function renderGenreChoices(state, element) {
     return (
       '<li>' +
         '<input type="radio" name="user-answer1" value="' + index + '" required>' +
-        '<label>' + choice + '</label>' +
+        '<label>' + choice.name + '</label>' +
       '</li>'
     );
   });
@@ -249,7 +285,7 @@ function renderDirectorChoices(state, element) {
     return (
       '<li>' +
         '<input type="radio" name="user-answer2" value="' + index + '" required>' +
-        '<label>' + choice + '</label>' +
+        '<label>' + choice.name + '</label>' +
       '</li>'
     );
   });
@@ -273,7 +309,7 @@ function renderStarChoices(state, element) {
     return (
       '<li>' +
         '<input type="radio" name="user-answer3" value="' + index + '" required>' +
-        '<label>' + choice + '</label>' +
+        '<label>' + choice.name + '</label>' +
       '</li>'
     );
   });
@@ -282,12 +318,27 @@ function renderStarChoices(state, element) {
 
 //Modify this to create links to three movies with choices as label
 function renderFinalPage(state, element) {
+
+  
+
   var text = "You chose " + state.movieKeys[0] + ", " +
-    state.movieKeys[1] + ", and " + state.movieKeys[2];
-  element.text(text);
+    state.movieKeys[1] + ", and " + state.movieKeys[2] + 
+    ". Your movie matches are " + findMovieName(state, state.movieKeys[0], state.genres) + 
+    ", " + findMovieName(state, state.movieKeys[1], state.directors) + ", " +
+    findMovieName(state, state.movieKeys[2], state.stars);
+  element.find('.results-text').text(text);
 }
 
+function findMovieName(state, movieKey, type) {
+   var typeShort = type.filter(function(short) { return short.name === movieKey; });
 
+alert(typeShort[0].name);
+   var movieIndex = typeShort[0].index;
+   alert(movieIndex);
+
+   return state.results[movieIndex].Name;
+
+}
 // Event handlers
 
 
@@ -301,7 +352,7 @@ $(".restart-game").click(function(event){
 $("form[name='genre-choices']").submit(function(event) {
   event.preventDefault();
   var answer1 = $("input[name='user-answer1']:checked").val();
-  state.movieKeys.push(state.genrePicks[answer1]);
+  state.movieKeys.push(state.genrePicks[answer1].name);
   alert(state.movieKeys);
   //answer = parseInt(answer, 10);
   //answerQuestion(state, answer);
@@ -312,7 +363,7 @@ $("form[name='genre-choices']").submit(function(event) {
 $("form[name='director-choices']").submit(function(event) {
   event.preventDefault();
   var answer2 = $("input[name='user-answer2']:checked").val();
-  state.movieKeys.push(state.directorPicks[answer2]);
+  state.movieKeys.push(state.directorPicks[answer2].name);
   alert(state.movieKeys);
   //answer = parseInt(answer, 10);
   //answerQuestion(state, answer);
@@ -324,7 +375,7 @@ $("form[name='director-choices']").submit(function(event) {
 $("form[name='star-choices']").submit(function(event) {
   event.preventDefault();
   var answer3 = $("input[name='user-answer3']:checked").val();
-  state.movieKeys.push(state.starPicks[answer3]);
+  state.movieKeys.push(state.starPicks[answer3].name);
   //answer = parseInt(answer, 10);
   //answerQuestion(state, answer);
   setRoute(state, 'final');
