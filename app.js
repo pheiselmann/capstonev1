@@ -321,8 +321,28 @@ function renderFinalPage(state, element) {
 
   //yUrL
 
-  var resultElement = '<p><a href="' + findMovieUrl(state, state.movieKeys[0], state.genres) + '"><img src="' +
-       findMovieName(state, state.movieKeys[0], state.genres)  + '"></a></p>';
+  // var resultElement1 = '<div class="js-movie-trailer1"><a href="' + findMovieUrl(state, state.movieKeys[0], state.genres) + '"><img src="' +
+  //       + '"></a></div>';
+
+  var resultElement1 = '<div class="js-movie-trailer1"><a href="' + findMovieUrl(state, state.movieKeys[0], state.genres) + 
+  '">' + findMovieName(state, state.movieKeys[0], state.genres) + '</a></div>';
+
+  var resultElement2 = '<div class="js-movie-trailer2"><a href="' + findMovieUrl(state, state.movieKeys[1], state.directors) + 
+  '">' + findMovieName(state, state.movieKeys[1], state.directors) + '</a></div>';
+
+   var resultElement3 = '<div class="js-movie-trailer3"><a href="' + findMovieUrl(state, state.movieKeys[2], state.stars) + 
+  '">' + findMovieName(state, state.movieKeys[2], state.stars) + '</a></div>';
+
+  // var resultElement2 = '<div class="js-movie-trailer2"><a href="' + findMovieUrl(state, state.movieKeys[1], state.genres) + '"><img src="' +
+  //       + '"></a></div>';
+
+  // var resultElement3 = '<div class="js-movie-trailer3"><a href="' + findMovieUrl(state, state.movieKeys[2], state.genres) + '"><img src="' +
+  //        + '"></a></div>';
+       // +
+       // '<div class="js-movie-trailer"><a href="' + findMovieUrl(state, state.movieKeys[1], state.genres) + '"><img src="' +
+       // findMovieName(state, state.movieKeys[1], state.genres)  + '"></a></div>' +
+       // '<div class="js-movie-trailer"><a href="' + findMovieUrl(state, state.movieKeys[2], state.genres) + '"><img src="' +
+       // findMovieName(state, state.movieKeys[2], state.genres)  + '"></a></div>';
 
   var text = "You chose " + state.movieKeys[0] + ", " +
     state.movieKeys[1] + ", and " + state.movieKeys[2] + 
@@ -330,7 +350,9 @@ function renderFinalPage(state, element) {
     ", " + findMovieName(state, state.movieKeys[1], state.directors) + ", " +
     findMovieName(state, state.movieKeys[2], state.stars);
   element.find('.results-text').text(text);
-  element.find('.results-trailers').html(resultElement);
+  element.find('.results-trailer1').html(resultElement1);
+  element.find('.results-trailer2').html(resultElement2);
+  element.find('.results-trailer3').html(resultElement3);
 }
 
 function findMovieName(state, movieKey, type) {
