@@ -247,6 +247,7 @@ function renderStartPage(state, element) {
 function renderGenrePage(state, element) {
   //renderQuestionCount(state, element.find('.question-count'));
   //renderQuestionText(state, element.find('.question-text'));
+  renderGenreText(state, element.find('.genre-text'));
   renderGenreChoices(state, element.find('.choices'));
 };
 
@@ -268,9 +269,16 @@ function renderGenreChoices(state, element) {
   element.html(choices);
 };
 
+function renderGenreText(state, element) {
+  //var currentQuestion = state.questions[state.currentQuestionIndex];
+  var text = 'Choose one of the genres below!';
+  element.text(text);
+};
+
 function renderDirectorPage(state, element) {
   //renderQuestionCount(state, element.find('.question-count'));
   //renderQuestionText(state, element.find('.question-text'));
+  renderDirectorText(state, element.find('.director-text'));
   renderDirectorChoices(state, element.find('.choices'));
 };
 
@@ -292,9 +300,16 @@ function renderDirectorChoices(state, element) {
   element.html(choices);
 };
 
+function renderDirectorText(state, element) {
+  //var currentQuestion = state.questions[state.currentQuestionIndex];
+  var text = 'Choose one of the directors below!';
+  element.text(text);
+};
+
 function renderStarPage(state, element) {
   //renderQuestionCount(state, element.find('.question-count'));
   //renderQuestionText(state, element.find('.question-text'));
+  renderStarText(state, element.find('.star-text'));
   renderStarChoices(state, element.find('.choices'));
 };
 
@@ -316,6 +331,12 @@ function renderStarChoices(state, element) {
   element.html(choices);
 };
 
+function renderStarText(state, element) {
+  //var currentQuestion = state.questions[state.currentQuestionIndex];
+  var text = 'Choose one of the stars below!';
+  element.text(text);
+};
+
 //Modify this to create links to three movies with choices as label
 function renderFinalPage(state, element) {
 
@@ -324,14 +345,25 @@ function renderFinalPage(state, element) {
   // var resultElement1 = '<div class="js-movie-trailer1"><a href="' + findMovieUrl(state, state.movieKeys[0], state.genres) + '"><img src="' +
   //       + '"></a></div>';
 
-  var resultElement1 = '<div class="js-movie-trailer1"><a href="' + findMovieUrl(state, state.movieKeys[0], state.genres) + 
-  '">' + findMovieName(state, state.movieKeys[0], state.genres) + '</a></div>';
+  // var resultElement1 = '<div class="js-movie-trailer1"><a href="' + findMovieUrl(state, state.movieKeys[0], state.genres) + 
+  // '">' + findMovieName(state, state.movieKeys[0], state.genres) + '</a></div>';
 
-  var resultElement2 = '<div class="js-movie-trailer2"><a href="' + findMovieUrl(state, state.movieKeys[1], state.directors) + 
-  '">' + findMovieName(state, state.movieKeys[1], state.directors) + '</a></div>';
+  var resultElement1 = '<p class="js-title1">' + findMovieName(state, state.movieKeys[0], state.genres) + '</p><div class="js-movie-trailer1"><a href="' + findMovieUrl(state, state.movieKeys[0], state.genres) + 
+  '"><img src="https://i.ytimg.com/vi/' + findYouTubeID(state, state.movieKeys[0], state.genres) + '/mqdefault.jpg"></a></div>';
+      
+  var resultElement2 = '<p class="js-title2">' + findMovieName(state, state.movieKeys[1], state.directors) + '</p><div class="js-movie-trailer2"><a href="' + findMovieUrl(state, state.movieKeys[0], state.genres) + 
+  '"><img src="https://i.ytimg.com/vi/' + findYouTubeID(state, state.movieKeys[1], state.directors) + '/mqdefault.jpg"></a></div>';
 
-   var resultElement3 = '<div class="js-movie-trailer3"><a href="' + findMovieUrl(state, state.movieKeys[2], state.stars) + 
-  '">' + findMovieName(state, state.movieKeys[2], state.stars) + '</a></div>';
+  var resultElement3 = '<p class="js-title3">' + findMovieName(state, state.movieKeys[2], state.stars) + '</p><div class="js-movie-trailer3"><a href="' + findMovieUrl(state, state.movieKeys[0], state.genres) + 
+  '"><img src="https://i.ytimg.com/vi/' + findYouTubeID(state, state.movieKeys[2], state.stars) + '/mqdefault.jpg"></a></div>';
+
+  //https://i.ytimg.com/vi/O90-DO9P6q0/mqdefault.jpg
+
+  // var resultElement2 = '<div class="js-movie-trailer2"><a href="' + findMovieUrl(state, state.movieKeys[1], state.directors) + 
+  // '">' + findMovieName(state, state.movieKeys[1], state.directors) + '</a></div>';
+
+  //  var resultElement3 = '<div class="js-movie-trailer3"><a href="' + findMovieUrl(state, state.movieKeys[2], state.stars) + 
+  // '">' + findMovieName(state, state.movieKeys[2], state.stars) + '</a></div>';
 
   // var resultElement2 = '<div class="js-movie-trailer2"><a href="' + findMovieUrl(state, state.movieKeys[1], state.genres) + '"><img src="' +
   //       + '"></a></div>';
@@ -374,6 +406,16 @@ function findMovieUrl(state, movieKey, type) {
   // alert(movieIndex);
 
    return state.results[movieIndex].yUrl;
+}
+
+function findYouTubeID(state, movieKey, type) {
+  var typeShort = type.filter(function(short) { return short.name === movieKey; });
+
+//alert(typeShort[0].name);
+   var movieIndex = typeShort[0].index;
+  // alert(movieIndex);
+
+   return state.results[movieIndex].yID;
 }
 // Event handlers
 
