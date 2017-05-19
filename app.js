@@ -319,7 +319,10 @@ function renderStarChoices(state, element) {
 //Modify this to create links to three movies with choices as label
 function renderFinalPage(state, element) {
 
-  
+  //yUrL
+
+  var resultElement = '<p><a href="' + findMovieUrl(state, state.movieKeys[0], state.genres) + '"><img src="' +
+       findMovieName(state, state.movieKeys[0], state.genres)  + '"></a></p>';
 
   var text = "You chose " + state.movieKeys[0] + ", " +
     state.movieKeys[1] + ", and " + state.movieKeys[2] + 
@@ -327,17 +330,28 @@ function renderFinalPage(state, element) {
     ", " + findMovieName(state, state.movieKeys[1], state.directors) + ", " +
     findMovieName(state, state.movieKeys[2], state.stars);
   element.find('.results-text').text(text);
+  element.find('.results-trailers').html(resultElement);
 }
 
 function findMovieName(state, movieKey, type) {
    var typeShort = type.filter(function(short) { return short.name === movieKey; });
 
-alert(typeShort[0].name);
+//alert(typeShort[0].name);
    var movieIndex = typeShort[0].index;
-   alert(movieIndex);
+  // alert(movieIndex);
 
    return state.results[movieIndex].Name;
 
+}
+
+function findMovieUrl(state, movieKey, type) {
+  var typeShort = type.filter(function(short) { return short.name === movieKey; });
+
+//alert(typeShort[0].name);
+   var movieIndex = typeShort[0].index;
+  // alert(movieIndex);
+
+   return state.results[movieIndex].yUrl;
 }
 // Event handlers
 
@@ -353,7 +367,7 @@ $("form[name='genre-choices']").submit(function(event) {
   event.preventDefault();
   var answer1 = $("input[name='user-answer1']:checked").val();
   state.movieKeys.push(state.genrePicks[answer1].name);
-  alert(state.movieKeys);
+  //alert(state.movieKeys);
   //answer = parseInt(answer, 10);
   //answerQuestion(state, answer);
   setRoute(state, 'director');
@@ -364,7 +378,7 @@ $("form[name='director-choices']").submit(function(event) {
   event.preventDefault();
   var answer2 = $("input[name='user-answer2']:checked").val();
   state.movieKeys.push(state.directorPicks[answer2].name);
-  alert(state.movieKeys);
+  //alert(state.movieKeys);
   //answer = parseInt(answer, 10);
   //answerQuestion(state, answer);
   setRoute(state, 'star');
