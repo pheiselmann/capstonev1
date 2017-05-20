@@ -125,6 +125,9 @@ function createRandom3DirectorPicks(state) {
       
       randomPick = state.directors[randomIntFromInterval(min,max)];
 
+      //Use JSONstringify to compare existing directorPicks.names with randomPicks.name
+      // !state.directorPicks.filter(function(pick) { return pick.name === randomPick.name});
+
       if (state.directorPicks.indexOf(randomPick) === -1) {
           state.directorPicks.push(randomPick);
       }
@@ -198,7 +201,7 @@ function createRandom3StarPicks(state) {
 
 function randomIntFromInterval(min,max)
 {
-    return Math.floor(Math.random()*(max-min+1)+min);
+    return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
 
@@ -351,10 +354,10 @@ function renderFinalPage(state, element) {
   var resultElement1 = '<p class="js-title1">' + findMovieName(state, state.movieKeys[0], state.genres) + '</p><div class="js-movie-trailer1"><a href="' + findMovieUrl(state, state.movieKeys[0], state.genres) + 
   '"><img src="https://i.ytimg.com/vi/' + findYouTubeID(state, state.movieKeys[0], state.genres) + '/mqdefault.jpg"></a></div>';
       
-  var resultElement2 = '<p class="js-title2">' + findMovieName(state, state.movieKeys[1], state.directors) + '</p><div class="js-movie-trailer2"><a href="' + findMovieUrl(state, state.movieKeys[0], state.genres) + 
+  var resultElement2 = '<p class="js-title2">' + findMovieName(state, state.movieKeys[1], state.directors) + '</p><div class="js-movie-trailer2"><a href="' + findMovieUrl(state, state.movieKeys[1], state.directors) + 
   '"><img src="https://i.ytimg.com/vi/' + findYouTubeID(state, state.movieKeys[1], state.directors) + '/mqdefault.jpg"></a></div>';
 
-  var resultElement3 = '<p class="js-title3">' + findMovieName(state, state.movieKeys[2], state.stars) + '</p><div class="js-movie-trailer3"><a href="' + findMovieUrl(state, state.movieKeys[0], state.genres) + 
+  var resultElement3 = '<p class="js-title3">' + findMovieName(state, state.movieKeys[2], state.stars) + '</p><div class="js-movie-trailer3"><a href="' + findMovieUrl(state, state.movieKeys[2], state.stars) + 
   '"><img src="https://i.ytimg.com/vi/' + findYouTubeID(state, state.movieKeys[2], state.stars) + '/mqdefault.jpg"></a></div>';
 
   //https://i.ytimg.com/vi/O90-DO9P6q0/mqdefault.jpg
