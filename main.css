@@ -29,3 +29,7 @@ p {
 	padding: 0 60px;
 	padding-top: 90px;
 }
+
+.js-error {
+	color: red;
+}

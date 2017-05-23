@@ -4,6 +4,8 @@ var state = {
 
   route: 'start',
   results: [],
+  resultsMinusGPickIndices: [],
+  resultsMinusGDPickIndices: [],
   genres: [],
   genreShorts: [],
   genrePicks: [],
@@ -45,6 +47,10 @@ function resetGame(state) {
   // state.score = 0;
   // state.currentQuestionIndex = 0;
   state.results = [];
+  //NEW
+  state.resultsMinusGPickIndices = [],
+  state.resultsMinusGDPickIndices = [],
+  //NEW
   state.genres = [];
   state.genrePicks = [];
   state.directors = [];
@@ -57,8 +63,15 @@ function resetGame(state) {
 };
 
 function createStateArrays(state, data) {
-  if (data.Similar.Results) {
+  if (data.Similar.Results[0]) {
       state.results = data.Similar.Results;
+
+      //NEW
+      state.resultsMinusGPickIndices = data.Similar.Results.map(function(result, i) { return { index: i } });
+      state.resultsMinusGDPickIndices = data.Similar.Results.map(function(result, i) { return { index: i } });
+      //NEW
+      //alert(state.resultsMinusGPickIndices[0].index);
+      //state.resultsMinusGDPicks = state.results;
       createGenreArray(state);
       createRandom3GenrePicks(state);
       createDirectorArray(state);
@@ -66,9 +79,12 @@ function createStateArrays(state, data) {
       createStarArray(state);
       createRandom3StarPicks(state);
   }
-  // else {
-  //     renderErrorPage()
-  // }
+  else {
+      //renderErrorPage()
+      //alert("Movie not found.  Please try again.");
+      setRoute(state, 'error');
+      renderApp(state, PAGE_ELEMENTS);
+  }
 }
 
 function createGenreArray(state) {
@@ -91,9 +107,15 @@ function createRandom3GenrePicks(state) {
     while (state.genrePicks.length < 3) {
       
       randomPick = state.genres[randomIntFromInterval(min,max)];
+      //alert(randomPick.index)
 
       if (state.genrePicks.indexOf(randomPick) === -1) {
           state.genrePicks.push(randomPick);
+          //NEW
+          delete state.resultsMinusGPickIndices[randomPick.index];
+          delete state.resultsMinusGDPickIndices[randomPick.index];
+          //NEW
+
       }
     // state.genrePicks.push(state.genres[randomIntFromInterval(min,max)]);
     // state.genrePicks.push(state.genres[randomIntFromInterval(min,max)]);
@@ -124,12 +146,18 @@ function createRandom3DirectorPicks(state) {
     while (state.directorPicks.length < 3) {
       
       randomPick = state.directors[randomIntFromInterval(min,max)];
+      //alert(state.resultsMinusGPicks[randomPick.index]);
 
       //Use JSONstringify to compare existing directorPicks.names with randomPicks.name
       // !state.directorPicks.filter(function(pick) { return pick.name === randomPick.name});
-
-      if (state.directorPicks.indexOf(randomPick) === -1) {
+      //NEW
+      if (state.directorPicks.indexOf(randomPick) === -1 && state.resultsMinusGPickIndices[randomPick.index]) {
           state.directorPicks.push(randomPick);
+          delete state.resultsMinusGDPickIndices[randomPick.index];
+
+      //NEW
+      // if (state.directorPicks.indexOf(randomPick) === -1) {
+      //     state.directorPicks.push(randomPick);
       }
     }
 }
@@ -193,8 +221,12 @@ function createRandom3StarPicks(state) {
       
       randomPick = state.stars[randomIntFromInterval(min,max)];
 
-      if (state.starPicks.indexOf(randomPick) === -1) {
+      //NEW
+      if (state.starPicks.indexOf(randomPick) === -1 && state.resultsMinusGDPickIndices[randomPick.index]) {
           state.starPicks.push(randomPick);
+      //NEW
+      // if (state.starPicks.indexOf(randomPick) === -1) {
+      //     state.starPicks.push(randomPick);
       }
     }
 }
@@ -238,6 +270,11 @@ function renderApp(state, elements) {
   else if (state.route === 'final') {
       renderFinalPage(state, elements[state.route]);
   }
+  //NEW
+  else if (state.route === 'error') {
+      renderErrorPage(state, elements[state.route]);
+  }
+  //NEW
 };
 
 // at the moment, `renderStartPage` doesn't do anything, because
@@ -463,6 +500,15 @@ $("form[name='star-choices']").submit(function(event) {
   renderApp(state, PAGE_ELEMENTS);
 });
 
+$("form[name='js-search-again']").submit(function(event) {
+  event.preventDefault();
+  var query = $(this).find('.js-query').val();
+    
+    //getDataFromApi(query, displayTasteDiveSearchData);
+  getDataFromApi(query, startProcess);
+});
+
+
 
 
 function displayTasteDiveSearchData(data) {
@@ -513,7 +559,10 @@ var PAGE_ELEMENTS = {
   'genre': $('.genre-page'),
   'director': $('.director-page'),
   'star': $('.star-page'),
-  'final': $('.final-page')
+  'final': $('.final-page'),
+  //NEW
+  'error': $('.error-page')
+  //neW
   // 'question': $('.question-page'),
   // 'answer-feedback': $('.answer-feedback-page'),
   // 'final-feedback': $('.final-feedback-page')
