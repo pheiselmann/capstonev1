@@ -72,18 +72,26 @@ function createStateArrays(state, data) {
       //NEW
       //alert(state.resultsMinusGPickIndices[0].index);
       //state.resultsMinusGDPicks = state.results;
+      
       createGenreArray(state);
       createRandom3GenrePicks(state);
       createDirectorArray(state);
       createRandom3DirectorPicks(state);
       createStarArray(state);
       createRandom3StarPicks(state);
+
+      //NEW
+      setRoute(state, 'genre');
+      renderApp(state, PAGE_ELEMENTS);
+      //NEW
   }
   else {
       //renderErrorPage()
       //alert("Movie not found.  Please try again.");
       setRoute(state, 'error');
+      
       renderApp(state, PAGE_ELEMENTS);
+      //PAGE_ELEMENTS[state.route].show();
   }
 }
 
@@ -103,13 +111,15 @@ function createRandom3GenrePicks(state) {
     var max = state.genres.length - 1;
     var min = 0
     var randomPick;
+    var words = 0;
 
     while (state.genrePicks.length < 3) {
       
       randomPick = state.genres[randomIntFromInterval(min,max)];
+      words = randomPick.name.split(' ');
       //alert(randomPick.index)
 
-      if (state.genrePicks.indexOf(randomPick) === -1) {
+      if (words.length < 11 && !randomPick.name.match(/^[a-z]/) && !randomPick.name.match(/[a-z][a-z]\./) && !randomPick.name.match(/,/) && state.genrePicks.indexOf(randomPick) === -1) {
           state.genrePicks.push(randomPick);
           //NEW
           delete state.resultsMinusGPickIndices[randomPick.index];
@@ -142,16 +152,18 @@ function createRandom3DirectorPicks(state) {
     var max = state.directors.length - 1;
     var min = 0
     var randomPick;
+    var words = 0;
 
     while (state.directorPicks.length < 3) {
       
       randomPick = state.directors[randomIntFromInterval(min,max)];
+      words = randomPick.name.split(' ');
       //alert(state.resultsMinusGPicks[randomPick.index]);
 
       //Use JSONstringify to compare existing directorPicks.names with randomPicks.name
       // !state.directorPicks.filter(function(pick) { return pick.name === randomPick.name});
       //NEW
-      if (state.directorPicks.indexOf(randomPick) === -1 && state.resultsMinusGPickIndices[randomPick.index]) {
+      if (words.length < 5 && !randomPick.name.match(/^[a-z]/) && !randomPick.name.match(/[a-z][a-z]\./) && !randomPick.name.match(/,/) && state.directorPicks.indexOf(randomPick) === -1 && state.resultsMinusGPickIndices[randomPick.index]) {
           state.directorPicks.push(randomPick);
           delete state.resultsMinusGDPickIndices[randomPick.index];
 
@@ -216,13 +228,15 @@ function createRandom3StarPicks(state) {
     var max = state.stars.length - 1;
     var min = 0
     var randomPick;
+    var words = 0;
 
     while (state.starPicks.length < 3) {
       
       randomPick = state.stars[randomIntFromInterval(min,max)];
+      words = randomPick.name.split(' ');
 
       //NEW
-      if (state.starPicks.indexOf(randomPick) === -1 && state.resultsMinusGDPickIndices[randomPick.index]) {
+      if (words.length < 4 && !randomPick.name.match(/^[a-z]/) && !randomPick.name.match(/[a-z][a-z]\./) && !randomPick.name.match(/,/) && state.starPicks.indexOf(randomPick) === -1 && state.resultsMinusGDPickIndices[randomPick.index]) {
           state.starPicks.push(randomPick);
       //NEW
       // if (state.starPicks.indexOf(randomPick) === -1) {
@@ -273,6 +287,8 @@ function renderApp(state, elements) {
   //NEW
   else if (state.route === 'error') {
       renderErrorPage(state, elements[state.route]);
+   
+
   }
   //NEW
 };
@@ -283,6 +299,14 @@ function renderApp(state, elements) {
 // application view is accounted for in our system
 function renderStartPage(state, element) {
 };
+
+function renderErrorPage(state, element) {
+
+};
+
+// function renderErrorPage(state, element) {
+//   element.find('.js-query').text('blah');
+// }
 
 function renderGenrePage(state, element) {
   //renderQuestionCount(state, element.find('.question-count'));
@@ -388,14 +412,50 @@ function renderFinalPage(state, element) {
   // var resultElement1 = '<div class="js-movie-trailer1"><a href="' + findMovieUrl(state, state.movieKeys[0], state.genres) + 
   // '">' + findMovieName(state, state.movieKeys[0], state.genres) + '</a></div>';
 
-  var resultElement1 = '<p class="js-title1">' + findMovieName(state, state.movieKeys[0], state.genres) + '</p><div class="js-movie-trailer1"><a href="' + findMovieUrl(state, state.movieKeys[0], state.genres) + 
-  '"><img src="https://i.ytimg.com/vi/' + findYouTubeID(state, state.movieKeys[0], state.genres) + '/mqdefault.jpg"></a></div>';
+  var resultElement1 = '<div class="js-movie-trailer1"><a href="' + findMovieUrl(state, state.movieKeys[0], state.genres) + 
+  '"><img class="js-movie1" src="https://i.ytimg.com/vi/' + findYouTubeID(state, state.movieKeys[0], state.genres) + '/mqdefault.jpg"></a></div>';
       
-  var resultElement2 = '<p class="js-title2">' + findMovieName(state, state.movieKeys[1], state.directors) + '</p><div class="js-movie-trailer2"><a href="' + findMovieUrl(state, state.movieKeys[1], state.directors) + 
-  '"><img src="https://i.ytimg.com/vi/' + findYouTubeID(state, state.movieKeys[1], state.directors) + '/mqdefault.jpg"></a></div>';
+  var resultElement2 = '<div class="js-movie-trailer2"><a href="' + findMovieUrl(state, state.movieKeys[1], state.directors) + 
+  '"><img class="js-movie2" src="https://i.ytimg.com/vi/' + findYouTubeID(state, state.movieKeys[1], state.directors) + '/mqdefault.jpg"></a></div>';
 
-  var resultElement3 = '<p class="js-title3">' + findMovieName(state, state.movieKeys[2], state.stars) + '</p><div class="js-movie-trailer3"><a href="' + findMovieUrl(state, state.movieKeys[2], state.stars) + 
-  '"><img src="https://i.ytimg.com/vi/' + findYouTubeID(state, state.movieKeys[2], state.stars) + '/mqdefault.jpg"></a></div>';
+  var resultElement3 = '<div class="js-movie-trailer3"><a href="' + findMovieUrl(state, state.movieKeys[2], state.stars) + 
+  '"><img class="js-movie3" src="https://i.ytimg.com/vi/' + findYouTubeID(state, state.movieKeys[2], state.stars) + '/mqdefault.jpg"></a></div>';
+
+
+  var results = 
+  '<h1>Results</h1>' + 
+        '<p class="results-text"></p>' +
+  '<div class="col-4">' + 
+    '<div class="results-trailer1"><a href="' + findMovieUrl(state, state.movieKeys[0], state.genres) + 
+      '"><img src="https://i.ytimg.com/vi/' + findYouTubeID(state, state.movieKeys[0], state.genres) + '/mqdefault.jpg"></a>' +
+    '</div>' + 
+    '<div class="trailer1-link"><a href="' + findMovieUrl(state, state.movieKeys[0], state.genres) + '">' + 
+    findMovieName(state, state.movieKeys[0], state.genres) + '</a>' +
+    '</div>' +
+  '</div>' + 
+  '<div class="col-4">' + 
+    '<div class="results-trailer1"><a href="' + findMovieUrl(state, state.movieKeys[1], state.directors) + 
+      '"><img src="https://i.ytimg.com/vi/' + findYouTubeID(state, state.movieKeys[1], state.directors) + '/mqdefault.jpg"></a>' +
+    '</div>' + 
+    '<div class="trailer1-link"><a href="' + findMovieUrl(state, state.movieKeys[1], state.directors) + '">' + 
+    findMovieName(state, state.movieKeys[1], state.directors) + '</a>' +
+  '</div>' +
+  '<div class="col-4">' + 
+    '<div class="results-trailer1"><a href="' + findMovieUrl(state, state.movieKeys[2], state.stars) + 
+      '"><img src="https://i.ytimg.com/vi/' + findYouTubeID(state, state.movieKeys[2], state.stars) + '/mqdefault.jpg"></a>' +
+    '</div>' + 
+    '<div class="trailer1-link"><a href="' + findMovieUrl(state, state.movieKeys[2], state.stars) + '">' + 
+    findMovieName(state, state.movieKeys[2], state.stars) + '</a>' +
+  '</div>';
+
+  // var resultElement1 = '<p class="js-title1">' + findMovieName(state, state.movieKeys[0], state.genres) + '</p><div class="js-movie-trailer1"><a href="' + findMovieUrl(state, state.movieKeys[0], state.genres) + 
+  // '"><img src="https://i.ytimg.com/vi/' + findYouTubeID(state, state.movieKeys[0], state.genres) + '/mqdefault.jpg"></a></div>';
+      
+  // var resultElement2 = '<p class="js-title2">' + findMovieName(state, state.movieKeys[1], state.directors) + '</p><div class="js-movie-trailer2"><a href="' + findMovieUrl(state, state.movieKeys[1], state.directors) + 
+  // '"><img src="https://i.ytimg.com/vi/' + findYouTubeID(state, state.movieKeys[1], state.directors) + '/mqdefault.jpg"></a></div>';
+
+  // var resultElement3 = '<p class="js-title3">' + findMovieName(state, state.movieKeys[2], state.stars) + '</p><div class="js-movie-trailer3"><a href="' + findMovieUrl(state, state.movieKeys[2], state.stars) + 
+  // '"><img src="https://i.ytimg.com/vi/' + findYouTubeID(state, state.movieKeys[2], state.stars) + '/mqdefault.jpg"></a></div>';
 
   //https://i.ytimg.com/vi/O90-DO9P6q0/mqdefault.jpg
 
@@ -419,12 +479,13 @@ function renderFinalPage(state, element) {
   var text = "You chose " + state.movieKeys[0] + ", " +
     state.movieKeys[1] + ", and " + state.movieKeys[2] + 
     ". Your movie matches are " + findMovieName(state, state.movieKeys[0], state.genres) + 
-    ", " + findMovieName(state, state.movieKeys[1], state.directors) + ", " +
-    findMovieName(state, state.movieKeys[2], state.stars);
+    ", " + findMovieName(state, state.movieKeys[1], state.directors) + ", and " +
+    findMovieName(state, state.movieKeys[2], state.stars) + ".";
   element.find('.results-text').text(text);
   element.find('.results-trailer1').html(resultElement1);
   element.find('.results-trailer2').html(resultElement2);
   element.find('.results-trailer3').html(resultElement3);
+  // element.find('.row').html(results);
 }
 
 function findMovieName(state, movieKey, type) {
@@ -503,7 +564,7 @@ $("form[name='star-choices']").submit(function(event) {
 $("form[name='js-search-again']").submit(function(event) {
   event.preventDefault();
   var query = $(this).find('.js-query').val();
-    
+  
     //getDataFromApi(query, displayTasteDiveSearchData);
   getDataFromApi(query, startProcess);
 });
@@ -540,16 +601,32 @@ function watchSubmit(state) {
   $('.js-search-form').submit(function(e) {
     e.preventDefault();
     var query = $(this).find('.js-query').val();
-    
     //getDataFromApi(query, displayTasteDiveSearchData);
     getDataFromApi(query, startProcess);
   });
 }
 
+// function watchSubmit(state) {
+//   $('.js-search-form').submit(function(e) {
+//     e.preventDefault();
+//     var query = $(this).find('.js-query').val();
+    
+//     //getDataFromApi(query, displayTasteDiveSearchData);
+//     getDataFromApi(query, startProcess);
+//   });
+//   $('.js-search-again').submit(function(e) {
+//     e.preventDefault();
+//     var query = $(this).find('.js-query').val();
+    
+//     //getDataFromApi(query, displayTasteDiveSearchData);
+//     getDataFromApi(query, startProcess);
+//   });
+// }
+
 function startProcess(data) {
   createStateArrays(state, data);
-  setRoute(state, 'genre');
-  renderApp(state, PAGE_ELEMENTS);
+  // setRoute(state, 'genre');
+  // renderApp(state, PAGE_ELEMENTS);
 }
 
 
