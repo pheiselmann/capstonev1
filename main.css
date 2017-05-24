@@ -17,37 +17,71 @@
 
 
 main {
-	max-width: 960px;
+	max-width: 1000px;
 	margin: 0 auto;
+	padding: 0 60px;
+	padding-top: 90px;
 }
 
 p {
-	max-width: 400px;
+	max-width: 1000px;
+}
+
+button:hover, .link:hover, .trailer:hover {
+	cursor: pointer;
+	
+}
+
+
+button {
+	margin-top: 10px;
+	font-weight: bold;
+}
+
+.link:hover {
+	text-decoration: underline;
+}
+
+.trailer {
+  border: 1px solid #E5E5E5;
+  margin-bottom: 0px;
+}
+
+.link{
+	/*padding: 20px;*/
+	text-align: center;
+	margin-bottom: 10px;
+	text-decoration: none;
+}
+
+a:link {
+	text-decoration: none;
+	color: black;
 }
 
 .container {
-	padding: 0 60px;
-	padding-top: 90px;
+	/*padding: 0 60px;
+	padding-top: 90px;*/
 }
 
 .js-error {
 	color: red;
 }
 
-.js-movie1 .js-movie2 .js-movie3 {
+.movie-image {
 	width: 100%;
 }
 
-.trailer1-link .trailer2-link .trailer3-link {
+/*.trailer1-link .trailer2-link .trailer3-link {
 
 	display: inline-block; 
 	margin: 0px auto;
 	text-align: center;
 	padding: 10px;
-}
+}*/
 
 
-.row {
+.row, button {
   max-width: 1000px;
   padding-left: 20px;
   padding-right: 20px;

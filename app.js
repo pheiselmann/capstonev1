@@ -412,41 +412,75 @@ function renderFinalPage(state, element) {
   // var resultElement1 = '<div class="js-movie-trailer1"><a href="' + findMovieUrl(state, state.movieKeys[0], state.genres) + 
   // '">' + findMovieName(state, state.movieKeys[0], state.genres) + '</a></div>';
 
-  var resultElement1 = '<div class="js-movie-trailer1"><a href="' + findMovieUrl(state, state.movieKeys[0], state.genres) + 
-  '"><img class="js-movie1" src="https://i.ytimg.com/vi/' + findYouTubeID(state, state.movieKeys[0], state.genres) + '/mqdefault.jpg"></a></div>';
+  // var resultElement1 = '<div class="js-movie-trailer1"><a href="' + findMovieUrl(state, state.movieKeys[0], state.genres) + 
+  // '"><img class="js-movie1" src="https://i.ytimg.com/vi/' + findYouTubeID(state, state.movieKeys[0], state.genres) + '/mqdefault.jpg"></a></div>';
+
+// var resultElement2 = '<div class="js-movie-trailer2"><a href="' + findMovieUrl(state, state.movieKeys[1], state.directors) + 
+//   '"><img class="js-movie2" src="https://i.ytimg.com/vi/' + findYouTubeID(state, state.movieKeys[1], state.directors) + '/mqdefault.jpg"></a></div>';
+
+//   var resultElement3 = '<div class="js-movie-trailer3"><a href="' + findMovieUrl(state, state.movieKeys[2], state.stars) + 
+//   '"><img class="js-movie3" src="https://i.ytimg.com/vi/' + findYouTubeID(state, state.movieKeys[2], state.stars) + '/mqdefault.jpg"></a></div>';
+  var text = "You chose " + state.movieKeys[0] + ", " +
+    state.movieKeys[1] + ", and " + state.movieKeys[2] + 
+    ". Your movie matches are " + findMovieName(state, state.movieKeys[0], state.genres) + 
+    ", " + findMovieName(state, state.movieKeys[1], state.directors) + ", and " +
+    findMovieName(state, state.movieKeys[2], state.stars) + ".";
+
+  var resultElement1 = '<a href="' + findMovieUrl(state, state.movieKeys[0], state.genres) + 
+  '"><img class="movie-image" src="https://i.ytimg.com/vi/' + findYouTubeID(state, state.movieKeys[0], state.genres) + '/mqdefault.jpg"></a>';
       
-  var resultElement2 = '<div class="js-movie-trailer2"><a href="' + findMovieUrl(state, state.movieKeys[1], state.directors) + 
-  '"><img class="js-movie2" src="https://i.ytimg.com/vi/' + findYouTubeID(state, state.movieKeys[1], state.directors) + '/mqdefault.jpg"></a></div>';
+  var resultElement2 = '<a href="' + findMovieUrl(state, state.movieKeys[1], state.directors) + 
+  '"><img class="movie-image" src="https://i.ytimg.com/vi/' + findYouTubeID(state, state.movieKeys[1], state.directors) + '/mqdefault.jpg"></a>';
 
-  var resultElement3 = '<div class="js-movie-trailer3"><a href="' + findMovieUrl(state, state.movieKeys[2], state.stars) + 
-  '"><img class="js-movie3" src="https://i.ytimg.com/vi/' + findYouTubeID(state, state.movieKeys[2], state.stars) + '/mqdefault.jpg"></a></div>';
+  var resultElement3 = '<a href="' + findMovieUrl(state, state.movieKeys[2], state.stars) + 
+  '"><img class="movie-image" src="https://i.ytimg.com/vi/' + findYouTubeID(state, state.movieKeys[2], state.stars) + '/mqdefault.jpg"></a>';
 
 
-  var results = 
-  '<h1>Results</h1>' + 
-        '<p class="results-text"></p>' +
-  '<div class="col-4">' + 
-    '<div class="results-trailer1"><a href="' + findMovieUrl(state, state.movieKeys[0], state.genres) + 
-      '"><img src="https://i.ytimg.com/vi/' + findYouTubeID(state, state.movieKeys[0], state.genres) + '/mqdefault.jpg"></a>' +
-    '</div>' + 
-    '<div class="trailer1-link"><a href="' + findMovieUrl(state, state.movieKeys[0], state.genres) + '">' + 
-    findMovieName(state, state.movieKeys[0], state.genres) + '</a>' +
-    '</div>' +
-  '</div>' + 
-  '<div class="col-4">' + 
-    '<div class="results-trailer1"><a href="' + findMovieUrl(state, state.movieKeys[1], state.directors) + 
-      '"><img src="https://i.ytimg.com/vi/' + findYouTubeID(state, state.movieKeys[1], state.directors) + '/mqdefault.jpg"></a>' +
-    '</div>' + 
-    '<div class="trailer1-link"><a href="' + findMovieUrl(state, state.movieKeys[1], state.directors) + '">' + 
-    findMovieName(state, state.movieKeys[1], state.directors) + '</a>' +
-  '</div>' +
-  '<div class="col-4">' + 
-    '<div class="results-trailer1"><a href="' + findMovieUrl(state, state.movieKeys[2], state.stars) + 
-      '"><img src="https://i.ytimg.com/vi/' + findYouTubeID(state, state.movieKeys[2], state.stars) + '/mqdefault.jpg"></a>' +
-    '</div>' + 
-    '<div class="trailer1-link"><a href="' + findMovieUrl(state, state.movieKeys[2], state.stars) + '">' + 
-    findMovieName(state, state.movieKeys[2], state.stars) + '</a>' +
-  '</div>';
+  var resultLink1 = '<a href="' + + findMovieUrl(state, state.movieKeys[0], state.genres) + '">' + 
+  findMovieName(state, state.movieKeys[0], state.genres) + ' - A ' + state.movieKeys[0] + '</a>';
+
+  var resultLink2 = '<a href="' + + findMovieUrl(state, state.movieKeys[1], state.directors) + '">' + 
+  findMovieName(state, state.movieKeys[1], state.directors) + ' - Directed by ' + state.movieKeys[1] + '</a>';
+
+  var resultLink3 = '<a href="' + + findMovieUrl(state, state.movieKeys[2], state.stars) + '">' + 
+  findMovieName(state, state.movieKeys[2], state.stars)  + ' - Starring ' + state.movieKeys[2] + '</a>';
+
+
+  element.find('.results-text').text(text);
+  element.find('.results-trailer1').html(resultElement1);
+  element.find('.results-trailer2').html(resultElement2);
+  element.find('.results-trailer3').html(resultElement3);
+
+  //Trailer links
+  element.find('.trailer1-link').html(resultLink1);
+  element.find('.trailer2-link').html(resultLink2);
+  element.find('.trailer3-link').html(resultLink3);
+
+  // var results = 
+  // '<h1>Results</h1>' + 
+  //       '<p class="results-text"></p>' +
+  // '<div class="col-4">' + 
+  //   '<div class="results-trailer1"><a href="' + findMovieUrl(state, state.movieKeys[0], state.genres) + 
+  //     '"><img src="https://i.ytimg.com/vi/' + findYouTubeID(state, state.movieKeys[0], state.genres) + '/mqdefault.jpg"></a>' +
+  //   '</div>' + 
+  //   '<div class="trailer1-link"><a href="' + findMovieUrl(state, state.movieKeys[0], state.genres) + '">' + 
+  //   findMovieName(state, state.movieKeys[0], state.genres) + '</a>' +
+  //   '</div>' +
+  // '</div>' + 
+  // '<div class="col-4">' + 
+  //   '<div class="results-trailer1"><a href="' + findMovieUrl(state, state.movieKeys[1], state.directors) + 
+  //     '"><img src="https://i.ytimg.com/vi/' + findYouTubeID(state, state.movieKeys[1], state.directors) + '/mqdefault.jpg"></a>' +
+  //   '</div>' + 
+  //   '<div class="trailer1-link"><a href="' + findMovieUrl(state, state.movieKeys[1], state.directors) + '">' + 
+  //   findMovieName(state, state.movieKeys[1], state.directors) + '</a>' +
+  // '</div>' +
+  // '<div class="col-4">' + 
+  //   '<div class="results-trailer1"><a href="' + findMovieUrl(state, state.movieKeys[2], state.stars) + 
+  //     '"><img src="https://i.ytimg.com/vi/' + findYouTubeID(state, state.movieKeys[2], state.stars) + '/mqdefault.jpg"></a>' +
+  //   '</div>' + 
+  //   '<div class="trailer1-link"><a href="' + findMovieUrl(state, state.movieKeys[2], state.stars) + '">' + 
+  //   findMovieName(state, state.movieKeys[2], state.stars) + '</a>' +
+  // '</div>';
 
   // var resultElement1 = '<p class="js-title1">' + findMovieName(state, state.movieKeys[0], state.genres) + '</p><div class="js-movie-trailer1"><a href="' + findMovieUrl(state, state.movieKeys[0], state.genres) + 
   // '"><img src="https://i.ytimg.com/vi/' + findYouTubeID(state, state.movieKeys[0], state.genres) + '/mqdefault.jpg"></a></div>';
@@ -476,15 +510,6 @@ function renderFinalPage(state, element) {
        // '<div class="js-movie-trailer"><a href="' + findMovieUrl(state, state.movieKeys[2], state.genres) + '"><img src="' +
        // findMovieName(state, state.movieKeys[2], state.genres)  + '"></a></div>';
 
-  var text = "You chose " + state.movieKeys[0] + ", " +
-    state.movieKeys[1] + ", and " + state.movieKeys[2] + 
-    ". Your movie matches are " + findMovieName(state, state.movieKeys[0], state.genres) + 
-    ", " + findMovieName(state, state.movieKeys[1], state.directors) + ", and " +
-    findMovieName(state, state.movieKeys[2], state.stars) + ".";
-  element.find('.results-text').text(text);
-  element.find('.results-trailer1').html(resultElement1);
-  element.find('.results-trailer2').html(resultElement2);
-  element.find('.results-trailer3').html(resultElement3);
   // element.find('.row').html(results);
 }
 
